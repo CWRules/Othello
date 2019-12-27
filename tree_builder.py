@@ -134,7 +134,8 @@ def make_tree(root_node, search_depth):
         current_node = node_list.pop(0)
 
         # See if the game is over and generate child nodes
-        if current_node.move != 'skip' or current_node.parent.move != 'skip':
+        # TODO: current_node.parent does not exist if this is root node! Need better way to detect game end.
+        if current_node.move != 'skip' or current_node.parent == None or current_node.parent.move != 'skip':
             if len(current_node.children) == 0:
                 make_children(current_node)
             node_list += current_node.children

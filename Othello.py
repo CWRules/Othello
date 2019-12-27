@@ -1,4 +1,7 @@
-"""Othello"""
+"""Othello
+
+Othello-playing AI using breadth-first tree search.
+"""
 
 import tree_builder
 
@@ -17,7 +20,7 @@ def print_board(board):
 
 # Initial setup
 while True:
-    player_color = raw_input('Select your color (B/W): ').upper()
+    player_color = raw_input('Select AI color (B/W): ').upper()
     if player_color == 'B' or player_color == 'W':
         break
     else:
@@ -74,7 +77,7 @@ while True:
     tree_builder.prune_tree(root_node)
 
 # Game over
-print 'Game over'
+print '\nGame over'
 score = tree_builder.evaluate_board(root_node.board, True)
 if score > 0:
     print 'B wins!'
@@ -82,3 +85,5 @@ elif score < 0:
     print 'W wins!'
 else:
     print 'It\'s a tie!'
+
+raw_input("Press Enter to exit\n")
