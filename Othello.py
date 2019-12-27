@@ -26,7 +26,7 @@ start_board = [[' ',' ',' ',' ',' ',' ',' ',' '],
 
 print print_board(start_board)
 root_node = tree_builder.Node(start_board)
-tree_builder.make_tree(root_node, 10)
+tree_builder.make_tree(root_node, 6)
 
 if root_node.best_child_node == False:
     print 'Game is over'

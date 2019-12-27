@@ -25,9 +25,11 @@ class Node:
                 self.turn = 'W'
             else:
                 self.turn = 'B'
+            
+            self.depth = parent_node.depth + 1
         else:
-            # For root node, define initial game state
             self.turn = 'B'
+            self.depth = 0
 
 
 def check_validity(board, row, col, color):
@@ -103,34 +105,32 @@ def evaluate_board(board, finished):
         return black - white
 
 
-def evaluate_node(current_node, depth):
+def evaluate_node(current_node):
     """Determines the value of a node in the tree.
 
     Called recursively to propogate the values upwards using min-max.
-    Returns maximum recursion depth.
     """
     if len(current_node.children) == 0:
         current_node.value = evaluate_board(current_node.board, current_node.game_over)
     else:
-        depth = evaluate_node(current_node.children[0], depth + 1)
+        depth = evaluate_node(current_node.children[0])
         best_node = current_node.children[0]
         for child_node in current_node.children[1:]:
-            evaluate_node(child_node, depth + 1)
+            evaluate_node(child_node)
             if ( (current_node.turn == 'B' and child_node.value > best_node.value) or
                  (current_node.turn == 'W' and child_node.value < best_node.value) ):
                 best_node = child_node
         current_node.value = best_node.value
         current_node.best_child_node = best_node
-    return depth
 
 
-def make_tree(root_node, search_time):
+def make_tree(root_node, search_depth):
     """Given a starting board state, builds and evaluates the search tree."""
     node_list = [root_node]
     start_time = time.time()
-    print 'Starting tree search (cut off after {}s)'.format(search_time)
+    print 'Starting tree search (max depth {})'.format(search_depth)
 
-    while len(node_list) > 0 and time.time() - start_time < search_time:
+    while len(node_list) > 0 and node_list[0].depth <= search_depth:
         current_node = node_list.pop(0)
 
         # See if the game is over
@@ -139,10 +139,9 @@ def make_tree(root_node, search_time):
             node_list += current_node.children
         else:
             current_node.game_over = True
-    print 'Finished tree search, starting evaluation'
+    print 'Finished tree search after {0:.3f}s, starting evaluation'.format(time.time() - start_time)
 
     # Evaluate nodes
     start_time = time.time()
-    max_depth = evaluate_node(root_node, 0)
+    evaluate_node(root_node)
     print 'Evaluation finished after {0:.3f}s'.format(time.time() - start_time)
-    print 'Looked {} moves ahead'.format(max_depth)
