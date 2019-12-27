@@ -15,6 +15,15 @@ def print_board(board):
     return ret_string
 
 
+# Initial setup
+while True:
+    player_color = raw_input('Select your color (B/W): ').upper()
+    if player_color == 'B' or player_color == 'W':
+        break
+    else:
+        print 'Invalid selection'
+
+MAX_DEPTH = 5
 start_board = [[' ',' ',' ',' ',' ',' ',' ',' '],
                [' ',' ',' ',' ',' ',' ',' ',' '],
                [' ',' ',' ',' ',' ',' ',' ',' '],
@@ -24,12 +33,48 @@ start_board = [[' ',' ',' ',' ',' ',' ',' ',' '],
                [' ',' ',' ',' ',' ',' ',' ',' '],
                [' ',' ',' ',' ',' ',' ',' ',' ']]
 
-print print_board(start_board)
 root_node = tree_builder.Node(start_board)
-tree_builder.make_tree(root_node, 6)
+if root_node.turn != player_color:
+    tree_builder.make_tree(root_node, MAX_DEPTH)
 
-if root_node.best_child_node == False:
-    print 'Game is over'
+
+# Main loop
+while True:
+    print '\nTurn {} - {}\n{}'.format(root_node.depth + 1, root_node.turn, print_board(root_node.board))
+
+    if root_node.turn == player_color:
+        # Build tree and select best move
+        tree_builder.make_tree(root_node, root_node.depth + MAX_DEPTH)
+
+        print 'Best move is {}, value {}'.format(root_node.best_child_node.move, root_node.value)
+        root_node = root_node.best_child_node
+    else:
+        # Enter opponent's move
+        while True:
+            move_coords = raw_input('Enter opponent\'s move (row column): ').split()
+            if len(move_coords) == 2 and move_coords[0].isdigit() and move_coords[1].isdigit():
+                move = (int(move_coords[0]), int(move_coords[1]))
+                new_node = None
+                for child_node in root_node.children:
+                    if child_node.move == move:
+                        new_node = child_node
+                if new_node != None:
+                    root_node = new_node
+                    break
+                else:
+                    print 'Selection is not a legal move'
+            else:
+                print 'Invalid selection'
+
+    if root_node.game_over:
+        break
+
+# Game over
+print 'Game over'
+score = evaluate_board(root_node.board, True)
+if score > 0:
+    print 'B wins!'
+elif score < 0:
+    print 'W wins!'
 else:
-    print 'Best move is {}, value {}'.format(root_node.best_child_node.move, root_node.value)
-    print print_board(root_node.best_child_node.board)
+    print 'It\'s a tie!'

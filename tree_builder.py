@@ -133,15 +133,17 @@ def make_tree(root_node, search_depth):
     while len(node_list) > 0 and node_list[0].depth <= search_depth:
         current_node = node_list.pop(0)
 
-        # See if the game is over
+        # See if the game is over and generate child nodes
         if current_node.move != 'skip' or current_node.parent.move != 'skip':
-            make_children(current_node)
+            if len(current_node.children) == 0:
+                make_children(current_node)
             node_list += current_node.children
         else:
             current_node.game_over = True
-    print 'Finished tree search after {0:.3f}s, starting evaluation'.format(time.time() - start_time)
+    print 'Finished tree search after {0:.3f}s'.format(time.time() - start_time)
 
     # Evaluate nodes
+    print 'Starting evauation'
     start_time = time.time()
     evaluate_node(root_node)
     print 'Evaluation finished after {0:.3f}s'.format(time.time() - start_time)
