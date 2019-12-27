@@ -68,6 +68,7 @@ while True:
 
     if root_node.game_over:
         break
+    tree_builder.prune_tree(root_node)
 
 # Game over
 print 'Game over'

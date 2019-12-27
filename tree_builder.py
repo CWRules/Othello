@@ -147,3 +147,13 @@ def make_tree(root_node, search_depth):
     start_time = time.time()
     evaluate_node(root_node)
     print 'Evaluation finished after {0:.3f}s'.format(time.time() - start_time)
+
+
+def prune_tree(root_node):
+    """Deletes parent of root_node and all other children.
+
+    The garbage collector deals with the orphaned nodes if we just break one link.
+    """
+    root_node.parent.children.remove(root_node)
+    root_node.parent = None
+        
