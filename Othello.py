@@ -52,19 +52,22 @@ while True:
         # Enter opponent's move
         while True:
             move_coords = raw_input('Enter opponent\'s move (row column): ').split()
-            if len(move_coords) == 2 and move_coords[0].isdigit() and move_coords[1].isdigit():
+            if move_coords[0] == 'skip':
+                move = 'skip'
+            elif len(move_coords) == 2 and move_coords[0].isdigit() and move_coords[1].isdigit():
                 move = (int(move_coords[0]), int(move_coords[1]))
-                new_node = None
-                for child_node in root_node.children:
-                    if child_node.move == move:
-                        new_node = child_node
-                if new_node != None:
-                    root_node = new_node
-                    break
-                else:
-                    print 'Selection is not a legal move'
             else:
                 print 'Invalid selection'
+                continue
+            new_node = None
+            for child_node in root_node.children:
+                if child_node.move == move:
+                    new_node = child_node
+            if new_node != None:
+                root_node = new_node
+                break
+            else:
+                print 'Selection is not a legal move'
 
     if root_node.game_over:
         break
@@ -72,7 +75,7 @@ while True:
 
 # Game over
 print 'Game over'
-score = evaluate_board(root_node.board, True)
+score = tree_builder.evaluate_board(root_node.board, True)
 if score > 0:
     print 'B wins!'
 elif score < 0:
