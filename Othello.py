@@ -37,12 +37,12 @@ while True:
     else:
         print 'Invalid selection'
 
-MAX_DEPTH = 5
+MAX_TIME = 5
 start_board = read_board('starting_board.txt')
 
 root_node = tree_builder.Node(start_board)
 if root_node.turn != player_color:
-    tree_builder.make_tree(root_node, MAX_DEPTH)
+    tree_builder.make_tree(root_node, MAX_TIME)
 
 
 # Main loop
@@ -51,7 +51,7 @@ while True:
 
     if root_node.turn == player_color:
         # Build tree and select best move
-        tree_builder.make_tree(root_node, root_node.depth + MAX_DEPTH)
+        tree_builder.make_tree(root_node, MAX_TIME)
 
         print 'Best move is {}, value {}'.format(root_node.best_child_node.move, root_node.value)
         root_node = root_node.best_child_node
@@ -59,7 +59,6 @@ while True:
         if root_node.children[0].move == 'skip':
             print 'Opponent has no legal moves'
             root_node = root_node.children[0]
-            break
         else:
             # Enter opponent's move
             while True:
