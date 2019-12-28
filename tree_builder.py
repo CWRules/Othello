@@ -138,13 +138,13 @@ def make_tree(root_node, search_time):
     last_depth = root_node.depth
     nodes_visited = 0
 
-    print 'Starting tree search (target time {})'.format(search_time)
+    print 'Starting tree search (target time {}s)'.format(search_time)
     start_time = time.time()
     while len(node_list) > 0:
         current_node = node_list.pop(0)
         if current_node.depth != last_depth:
             # See if we need to cut off the tree search
-            if (nodes_visited * 0.001) + (time.time() - start_time) > search_time:
+            if ( (nodes_visited * 0.002) + (time.time() - start_time) ) > search_time:
                 print 'Ending search at depth {}'.format(last_depth - root_node.depth)
                 break
             else:
@@ -156,7 +156,7 @@ def make_tree(root_node, search_time):
     print 'Finished tree search after {0:.3f}s'.format(time.time() - start_time)
     print '{} nodes visited'.format(nodes_visited)
 
-    print 'Starting evauation'
+    print 'Starting evaluation'
     start_time = time.time()
     evaluate_node(root_node)
     print 'Evaluation finished after {0:.3f}s'.format(time.time() - start_time)
