@@ -131,17 +131,20 @@ def evaluate_node(current_node):
 def make_tree(root_node, search_depth):
     """Given a starting board state, builds and evaluates the search tree."""
     node_list = [root_node]
-    node_count = 0
+    nodes_visited = 0
+    children_generated = 0
 
     print 'Starting tree search (max depth {})'.format(search_depth)
     start_time = time.time()
     while len(node_list) > 0 and node_list[0].depth <= search_depth:
         current_node = node_list.pop(0)
-        node_count += 1
+        nodes_visited += 1
         if len(current_node.children) == 0 and current_node.game_over == False:
             make_children(current_node)
-        node_list += current_node.children            
-    print 'Finished tree search after {0:.3f}s, {1} total nodes'.format(time.time() - start_time, node_count)
+            children_generated += len(current_node.children)
+        node_list += current_node.children
+    print 'Finished tree search after {0:.3f}s'.format(time.time() - start_time)
+    print '{} nodes visited, {} children generated'.format(nodes_visited, children_generated)
 
     print 'Starting evauation'
     start_time = time.time()

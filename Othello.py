@@ -26,7 +26,7 @@ while True:
     else:
         print 'Invalid selection'
 
-MAX_DEPTH = 4
+MAX_DEPTH = 5
 start_board = [[' ',' ',' ',' ',' ',' ',' ',' '],
                [' ',' ',' ',' ',' ',' ',' ',' '],
                [' ',' ',' ',' ',' ',' ',' ',' '],
@@ -54,7 +54,7 @@ while True:
     else:
         # Enter opponent's move
         while True:
-            move_coords = raw_input('Enter opponent\'s move (row column): ').split()
+            move_coords = raw_input('Enter move (row column): ').split()
             if move_coords[0] == 'skip':
                 move = 'skip'
             elif len(move_coords) == 2 and move_coords[0].isdigit() and move_coords[1].isdigit():
