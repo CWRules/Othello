@@ -18,6 +18,17 @@ def print_board(board):
     return ret_string
 
 
+def read_board(filename):
+    """Reads board state from file and returns it as a list of lists."""
+    board = []
+    with open(filename) as f:
+        for line in f:
+            line = line.strip('\r\n')
+            line = line.replace('-', ' ')
+            board.append(list(line))
+    return board
+
+
 # Initial setup
 while True:
     player_color = raw_input('Select AI color (B/W): ').upper()
@@ -27,14 +38,7 @@ while True:
         print 'Invalid selection'
 
 MAX_DEPTH = 5
-start_board = [[' ',' ',' ',' ',' ',' ',' ',' '],
-               [' ',' ',' ',' ',' ',' ',' ',' '],
-               [' ',' ',' ',' ',' ',' ',' ',' '],
-               [' ',' ',' ','W','B',' ',' ',' '],
-               [' ',' ',' ','B','W',' ',' ',' '],
-               [' ',' ',' ',' ',' ',' ',' ',' '],
-               [' ',' ',' ',' ',' ',' ',' ',' '],
-               [' ',' ',' ',' ',' ',' ',' ',' ']]
+start_board = read_board('starting_board.txt')
 
 root_node = tree_builder.Node(start_board)
 if root_node.turn != player_color:
