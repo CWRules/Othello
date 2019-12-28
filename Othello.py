@@ -56,25 +56,28 @@ while True:
         print 'Best move is {}, value {}'.format(root_node.best_child_node.move, root_node.value)
         root_node = root_node.best_child_node
     else:
-        # Enter opponent's move
-        while True:
-            move_coords = raw_input('Enter move (row column): ').split()
-            if move_coords[0] == 'skip':
-                move = 'skip'
-            elif len(move_coords) == 2 and move_coords[0].isdigit() and move_coords[1].isdigit():
-                move = (int(move_coords[0]), int(move_coords[1]))
-            else:
-                print 'Invalid selection'
-                continue
-            new_node = None
-            for child_node in root_node.children:
-                if child_node.move == move:
-                    new_node = child_node
-            if new_node != None:
-                root_node = new_node
-                break
-            else:
-                print 'Selection is not a legal move'
+        if root_node.children[0].move == 'skip':
+            print 'Opponent has no legal moves'
+            root_node = root_node.children[0]
+            break
+        else:
+            # Enter opponent's move
+            while True:
+                move_coords = raw_input('Enter move (row column): ').split()
+                if len(move_coords) == 2 and move_coords[0].isdigit() and move_coords[1].isdigit():
+                    move = (int(move_coords[0]), int(move_coords[1]))
+                else:
+                    print 'Invalid selection'
+                    continue
+                new_node = None
+                for child_node in root_node.children:
+                    if child_node.move == move:
+                        new_node = child_node
+                if new_node != None:
+                    root_node = new_node
+                    break
+                else:
+                    print 'Selection is not a legal move'
 
     if root_node.game_over:
         break
