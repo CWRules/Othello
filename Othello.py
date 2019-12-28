@@ -18,6 +18,19 @@ def print_board(board):
     return ret_string
 
 
+def get_score(board):
+    """Returns a tuple representing the score of each player on the given board."""
+    black = 0
+    white = 0
+    for row in board:
+        for cell in row:
+            if cell == 'B':
+                black += 1
+            elif cell == 'W':
+                white += 1
+    return (black, white)
+
+
 def read_board(filename):
     """Reads board state from file and returns it as a list of lists."""
     board = []
@@ -37,7 +50,7 @@ while True:
     else:
         print 'Invalid selection'
 
-MAX_TIME = 5
+MAX_TIME = 30
 start_board = read_board('starting_board.txt')
 
 root_node = tree_builder.Node(start_board)
@@ -84,12 +97,13 @@ while True:
 
 # Game over
 print '\nGame over'
-score = tree_builder.evaluate_board(root_node.board, True)
-if score > 0:
+(black, white) = get_score(root_node.board)
+if black > white:
     print 'B wins!'
-elif score < 0:
+elif black < white:
     print 'W wins!'
 else:
     print 'It\'s a tie!'
+print '{} - {}'.format(black, white)
 
 raw_input("Press Enter to exit\n")
