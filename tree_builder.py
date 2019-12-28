@@ -76,7 +76,11 @@ def make_children(parent_node):
                     Node(new_board, parent_node, (row, col))
                     
     if len(parent_node.children) == 0:
-        Node(parent_node.board, parent_node, 'skip')
+        new_node = Node(parent_node.board, parent_node, 'skip')
+        
+        # See if the game is over
+        if parent_node.move == 'skip':
+            new_node.game_over = True
 
 
 def evaluate_board(board, finished):
@@ -127,23 +131,18 @@ def evaluate_node(current_node):
 def make_tree(root_node, search_depth):
     """Given a starting board state, builds and evaluates the search tree."""
     node_list = [root_node]
-    start_time = time.time()
-    print 'Starting tree search (max depth {})'.format(search_depth)
+    node_count = 0
 
+    print 'Starting tree search (max depth {})'.format(search_depth)
+    start_time = time.time()
     while len(node_list) > 0 and node_list[0].depth <= search_depth:
         current_node = node_list.pop(0)
+        node_count += 1
+        if len(current_node.children) == 0 and current_node.game_over == False:
+            make_children(current_node)
+        node_list += current_node.children            
+    print 'Finished tree search after {0:.3f}s, {1} total nodes'.format(time.time() - start_time, node_count)
 
-        # See if the game is over and generate child nodes
-        # TODO: current_node.parent does not exist if this is root node! Need better way to detect game end.
-        if current_node.move != 'skip' or current_node.parent == None or current_node.parent.move != 'skip':
-            if len(current_node.children) == 0:
-                make_children(current_node)
-            node_list += current_node.children
-        else:
-            current_node.game_over = True
-    print 'Finished tree search after {0:.3f}s'.format(time.time() - start_time)
-
-    # Evaluate nodes
     print 'Starting evauation'
     start_time = time.time()
     evaluate_node(root_node)

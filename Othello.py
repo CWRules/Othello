@@ -26,7 +26,7 @@ while True:
     else:
         print 'Invalid selection'
 
-MAX_DEPTH = 5
+MAX_DEPTH = 4
 start_board = [[' ',' ',' ',' ',' ',' ',' ',' '],
                [' ',' ',' ',' ',' ',' ',' ',' '],
                [' ',' ',' ',' ',' ',' ',' ',' '],
@@ -43,7 +43,7 @@ if root_node.turn != player_color:
 
 # Main loop
 while True:
-    print '\nTurn {} - {}\n{}'.format(root_node.depth + 1, root_node.turn, print_board(root_node.board))
+    print '\nTurn {} - {}\n{}\n'.format(root_node.depth + 1, root_node.turn, print_board(root_node.board))
 
     if root_node.turn == player_color:
         # Build tree and select best move
