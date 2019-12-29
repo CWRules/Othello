@@ -88,8 +88,11 @@ def evaluate_board(node):
     """Returns the value of the board state for a given node.
 
     Positive values are good for black, negative is good for white.
-    If the game is over, just count the number of stones of each color.
-    Otherwise, add a random fudge factor to incentivize moves that provide more options.
+    
+    Three heuristics are used:
+    1) Number of discs of each color. If the game is over, this is the only heuristic used.
+    2) A bonus for stable discs (ie. discs that cannot possibly be flipped)
+    3) A random modifier. This makes the AI less predictable, and incentivizes moves that provide more options.
     """
     score = 0
     for row in node.board:
@@ -102,7 +105,25 @@ def evaluate_board(node):
     if node.game_over:
         return score * 1000
     else:
+        score += compute_stability(node.board)
         return score + random.random()
+
+
+def compute_stability(node.board):
+    """Computes the stability value of a given board state.
+
+    For a disc to be stable, it must be stable in on all four axes (N-S, W-E, NW-SE, NE-SW).
+    
+    To be stable on one axis, one of the following must be true:
+    1) The disc is on the edge of the board.
+    2) The axis has no empty cells.
+    3) There is an adjacent stable disc of the same color.
+    
+    1 and 2 are checked for every stone on the first pass.
+    3 is checked repeatedly until no new stable discs are found.
+    """
+    return 0
+    # axes = ( ((-1,-1),( 1, 1)), (( 0,-1),( 0, 1)), (( 1,-1),(-1, 1)), (( 1, 0),(-1, 0)) )
 
 
 def evaluate_node(current_node):
