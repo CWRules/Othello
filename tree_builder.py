@@ -109,7 +109,7 @@ def evaluate_board(node):
         return score + random.random()
 
 
-def compute_stability(node.board):
+def compute_stability(board):
     """Computes the stability value of a given board state.
 
     For a disc to be stable, it must be stable in on all four axes (N-S, W-E, NW-SE, NE-SW).
@@ -122,8 +122,53 @@ def compute_stability(node.board):
     1 and 2 are checked for every stone on the first pass.
     3 is checked repeatedly until no new stable discs are found.
     """
+    stable_discs = set()
+    for row in range(len(board)):
+        max_row = len(board)
+        for col in range(len(board[row])):
+            max_col = len(board[row])
+            if board[row][col] != ' ':
+                stable_axes = { ((-1,-1),( 1, 1)): False,
+                                (( 0,-1),( 0, 1)): False,
+                                (( 1,-1),(-1, 1)): False,
+                                (( 1, 0),(-1, 0)): False }
+
+                # Edge of board?
+                for axis in stable_axes:
+                    if ( row + axis[0][0] < 0 or row + axis[0][0] >= max_row or
+                         col + axis[0][1] < 0 or col + axis[0][1] >= max_col or
+                         row + axis[1][0] < 0 or row + axis[1][0] >= max_row or
+                         col + axis[1][1] < 0 or col + axis[1][1] >= max_col ):
+                        stable_axes[axis] = True
+
+                # No empty cells?
+                for axis in stable_axes:
+                    if stable_axes[axis] == False:
+                        axis_full = True
+                        for direction in axis:
+                            current_row = row + direction[0]
+                            current_col = col + direction[1]
+                            while ( current_row >= 0 and current_row < max_row and
+                                    current_col >= 0 and current_col < max_col ):
+                                if board[current_row][current_col] == ' ':
+                                    axis_full = False
+                                    break
+                                current_row += direction[0]
+                                current_col += direction[1]
+                        if axis_full:
+                            stable_axes[axis] = True
+
+                # If disc is stable, add it to the set
+                stable_disc = True
+                for axis in stable_axes:
+                    if stable_axes[axis] == False:
+                        stable_disc = False
+                if stable_disc:
+                    stable_discs.add((row, col))
+
+
+    # TODO: Propogate stability to adjacent discs and compute stability heuristic value
     return 0
-    # axes = ( ((-1,-1),( 1, 1)), (( 0,-1),( 0, 1)), (( 1,-1),(-1, 1)), (( 1, 0),(-1, 0)) )
 
 
 def evaluate_node(current_node):
