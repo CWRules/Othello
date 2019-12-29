@@ -91,24 +91,18 @@ def evaluate_board(node):
     If the game is over, just count the number of stones of each color.
     Otherwise, add a random fudge factor to incentivize moves that provide more options.
     """
-    black = 0
-    white = 0
+    score = 0
     for row in node.board:
         for cell in row:
             if cell == 'B':
-                black += 1
+                score += 1
             elif cell == 'W':
-                white += 1
+                score -= 1
                 
     if node.game_over:
-        if black > white:
-            return 1000
-        if black < white:
-            return -1000
-        else:
-            return 0
+        return score * 1000
     else:
-        return black - white + random.random()
+        return score + random.random()
 
 
 def evaluate_node(current_node):
