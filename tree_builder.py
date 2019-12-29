@@ -3,7 +3,8 @@
 Build tree of possible board states, then evaluate terminal nodes and propogate upwards with min-max.
 """
 
-import copy, time
+import copy, time, random
+random.seed()
 
 
 class Node:
@@ -87,7 +88,8 @@ def evaluate_board(node):
     """Returns the value of the board state for a given node.
 
     Positive values are good for black, negative is good for white.
-    Currently just counts the number of stones of each color.
+    If the game is over, just count the number of stones of each color.
+    Otherwise, add a random fudge factor to incentivize moves that provide more options.
     """
     black = 0
     white = 0
@@ -106,7 +108,7 @@ def evaluate_board(node):
         else:
             return 0
     else:
-        return black - white
+        return black - white + random.random()
 
 
 def evaluate_node(current_node):

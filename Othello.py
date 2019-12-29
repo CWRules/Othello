@@ -66,7 +66,7 @@ while True:
         # Build tree and select best move
         tree_builder.make_tree(root_node, MAX_TIME)
 
-        print 'Best move is {}, value {}'.format(root_node.best_child_node.move, root_node.value)
+        print 'Best move is {0}, value {1:.3f}'.format(root_node.best_child_node.move, root_node.value)
         root_node = root_node.best_child_node
     else:
         if root_node.children[0].move == 'skip':
