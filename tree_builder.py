@@ -83,22 +83,22 @@ def make_children(parent_node):
             new_node.game_over = True
 
 
-def evaluate_board(board, finished):
-    """Returns the value of a board state.
+def evaluate_board(node):
+    """Returns the value of the board state for a given node.
 
     Positive values are good for black, negative is good for white.
     Currently just counts the number of stones of each color.
     """
     black = 0
     white = 0
-    for row in range(len(board)):
-        for col in range(len(board[row])):
-            if board[row][col] == 'B':
+    for row in node.board:
+        for cell in row:
+            if cell == 'B':
                 black += 1
-            elif board[row][col] == 'W':
+            elif cell == 'W':
                 white += 1
                 
-    if finished:
+    if node.game_over:
         if black > white:
             return 1000
         if black < white:
@@ -115,7 +115,7 @@ def evaluate_node(current_node):
     Called recursively to propogate the values upwards using min-max.
     """
     if len(current_node.children) == 0:
-        current_node.value = evaluate_board(current_node.board, current_node.game_over)
+        current_node.value = evaluate_board(current_node)
     else:
         depth = evaluate_node(current_node.children[0])
         best_node = current_node.children[0]
