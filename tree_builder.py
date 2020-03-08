@@ -106,7 +106,7 @@ def evaluate_board(node):
         return score * 1000
     else:
         score += compute_stability(node.board)
-        return score + random.random()
+        return score + random.random() - 0.5
 
 
 def compute_stability(board):
@@ -122,6 +122,7 @@ def compute_stability(board):
     1 and 2 are checked for every stone on the first pass.
     3 is checked repeatedly until no new stable discs are found.
     """
+    # TODO: Store stable discs in node and compute when new node is generated.
     stable_discs = set()
     for row in range(len(board)):
         max_row = len(board)
@@ -134,6 +135,7 @@ def compute_stability(board):
                                 (( 1, 0),(-1, 0)): False }
 
                 # Edge of board?
+                # TODO: You need to check this during the final iterations anyways. Move it there.
                 for axis in stable_axes:
                     if ( row + axis[0][0] < 0 or row + axis[0][0] >= max_row or
                          col + axis[0][1] < 0 or col + axis[0][1] >= max_col or
@@ -142,6 +144,7 @@ def compute_stability(board):
                         stable_axes[axis] = True
 
                 # No empty cells?
+                # TODO: Do this by axis instead of by cell, much less redundancy that way.
                 for axis in stable_axes:
                     if stable_axes[axis] == False:
                         axis_full = True
