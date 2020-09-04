@@ -182,7 +182,7 @@ def evaluate_node(current_node):
     if len(current_node.children) == 0:
         current_node.value = evaluate_board(current_node)
     else:
-        depth = evaluate_node(current_node.children[0])
+        evaluate_node(current_node.children[0])
         best_node = current_node.children[0]
         for child_node in current_node.children[1:]:
             evaluate_node(child_node)
